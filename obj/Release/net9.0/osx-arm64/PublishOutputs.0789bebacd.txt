@@ -1,0 +1,1 @@
+/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/osx-arm64/publish/MacOsPublish

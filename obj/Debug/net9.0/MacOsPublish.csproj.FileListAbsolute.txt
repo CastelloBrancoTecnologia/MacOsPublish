@@ -1,0 +1,14 @@
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/MacOsPublish
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/MacOsPublish.deps.json
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/MacOsPublish.runtimeconfig.json
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/MacOsPublish.dll
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/MacOsPublish.pdb
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.GeneratedMSBuildEditorConfig.editorconfig
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.AssemblyInfoInputs.cache
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.AssemblyInfo.cs
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.csproj.CoreCompileInputs.cache
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.dll
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/refint/MacOsPublish.dll
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.pdb
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/MacOsPublish.genruntimeconfig.cache
+/Users/cesar/RiderProjects/MacOsPublish/obj/Debug/net9.0/ref/MacOsPublish.dll

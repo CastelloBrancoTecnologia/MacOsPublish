@@ -1,0 +1,43 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "MacOsPublish/1.0.0": {
+        "dependencies": {
+          "Microsoft.DotNet.ILCompiler": "9.0.1",
+          "Microsoft.NET.ILLink.Tasks": "9.0.1"
+        },
+        "runtime": {
+          "MacOsPublish.dll": {}
+        }
+      },
+      "Microsoft.DotNet.ILCompiler/9.0.1": {},
+      "Microsoft.NET.ILLink.Tasks/9.0.1": {}
+    }
+  },
+  "libraries": {
+    "MacOsPublish/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.DotNet.ILCompiler/9.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YSn2LXCcOfV6VntSFASNmg1W8ldLPbI74YFx+uke2lYFuahhHfeQIgKS3W52R9phB6YLWT4MvLUPDQqUelplJg==",
+      "path": "microsoft.dotnet.ilcompiler/9.0.1",
+      "hashPath": "microsoft.dotnet.ilcompiler.9.0.1.nupkg.sha512"
+    },
+    "Microsoft.NET.ILLink.Tasks/9.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BKFAkdhUUJivAoKuSWcT23WH9E+AWQMJootzt9X+lnesOD2a2yNIe1ZQFtxB8H3ayskLBD5gYyIbj5GIfw7rZg==",
+      "path": "microsoft.net.illink.tasks/9.0.1",
+      "hashPath": "microsoft.net.illink.tasks.9.0.1.nupkg.sha512"
+    }
+  }
+}
