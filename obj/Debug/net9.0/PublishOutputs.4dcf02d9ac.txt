@@ -1,0 +1,5 @@
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/publish/MacOsPublish
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/publish/MacOsPublish.dll
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/publish/MacOsPublish.deps.json
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/publish/MacOsPublish.runtimeconfig.json
+/Users/cesar/RiderProjects/MacOsPublish/bin/Debug/net9.0/publish/MacOsPublish.pdb

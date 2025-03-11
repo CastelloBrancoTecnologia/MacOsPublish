@@ -1,12 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PublishAot>true</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>macospublish</ToolCommandName>
+        <PackageId>MacOsPublish</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Cesar Murilo Castello Branco Filho</Authors>
+        <Company>Castello Branco Tecnologia LTDA</Company>
+        <Description>Publish and bundle .NET apps for macOS</Description>
+        <PackageTags>macos;dotnet;publish;bundle;notarization;dmg;osx</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/CastelloBranco/MacOsPublish</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/CastelloBranco/MacOsPublish</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <ToolCommandName>macospublish</ToolCommandName>
+        <PackAsTool>true</PackAsTool>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Copyright>Copyright © 2025 Castello Branco Technologia LTDA. All rights reserved.</Copyright>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 </Project>

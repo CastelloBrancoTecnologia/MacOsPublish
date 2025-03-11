@@ -1,15 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HS/UsbOVhGY=",
+  "dgSpecHash": "Zxz6SGlOUXo=",
   "success": true,
   "projectFilePath": "/Users/cesar/RiderProjects/MacOsPublish/MacOsPublish.csproj",
-  "expectedPackageFiles": [
-    "/Users/cesar/.nuget/packages/microsoft.dotnet.ilcompiler/9.0.1/microsoft.dotnet.ilcompiler.9.0.1.nupkg.sha512",
-    "/Users/cesar/.nuget/packages/microsoft.net.illink.tasks/9.0.1/microsoft.net.illink.tasks.9.0.1.nupkg.sha512",
-    "/Users/cesar/.nuget/packages/runtime.osx-arm64.microsoft.dotnet.ilcompiler/9.0.1/runtime.osx-arm64.microsoft.dotnet.ilcompiler.9.0.1.nupkg.sha512",
-    "/Users/cesar/.nuget/packages/microsoft.netcore.app.runtime.osx-arm64/9.0.1/microsoft.netcore.app.runtime.osx-arm64.9.0.1.nupkg.sha512",
-    "/Users/cesar/.nuget/packages/microsoft.aspnetcore.app.runtime.osx-arm64/9.0.1/microsoft.aspnetcore.app.runtime.osx-arm64.9.0.1.nupkg.sha512",
-    "/Users/cesar/.nuget/packages/runtime.osx-arm64.microsoft.dotnet.ilcompiler/9.0.1/runtime.osx-arm64.microsoft.dotnet.ilcompiler.9.0.1.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

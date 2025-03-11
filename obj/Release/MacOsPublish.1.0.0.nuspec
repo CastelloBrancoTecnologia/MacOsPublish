@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MacOsPublish</id>
+    <version>1.0.0</version>
+    <authors>Cesar Murilo Castello Branco Filho</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/CastelloBranco/MacOsPublish</projectUrl>
+    <description>Publish and bundle .NET apps for macOS</description>
+    <copyright>Copyright © 2025 Castello Branco Technologia LTDA. All rights reserved.</copyright>
+    <tags>macos dotnet publish bundle notarization dmg osx</tags>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" url="https://github.com/CastelloBranco/MacOsPublish" commit="6ebba2dd8828d9587067cd7d1b0fd158c731c109" />
+  </metadata>
+  <files>
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/obj/DotnetToolSettings.xml" target="tools/net9.0/any/DotnetToolSettings.xml" />
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/publish/MacOsPublish.dll" target="tools/net9.0/any/MacOsPublish.dll" />
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/publish/MacOsPublish.deps.json" target="tools/net9.0/any/MacOsPublish.deps.json" />
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/publish/MacOsPublish.runtimeconfig.json" target="tools/net9.0/any/MacOsPublish.runtimeconfig.json" />
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/publish/MacOsPublish.pdb" target="tools/net9.0/any/MacOsPublish.pdb" />
+    <file src="/Users/cesar/RiderProjects/MacOsPublish/README.md" target="README.md" />
+  </files>
+</package>

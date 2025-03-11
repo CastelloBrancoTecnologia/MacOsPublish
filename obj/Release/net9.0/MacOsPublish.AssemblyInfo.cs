@@ -11,7 +11,8 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Castello Branco Tecnologia LTDA")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2025 Castello Branco Technologia LTDA. All rights reserved.")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Publish and bundle .NET apps for macOS")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ebba2dd8828d9587067cd7d1b0fd158c731c109")]

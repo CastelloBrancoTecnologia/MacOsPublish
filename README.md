@@ -4,7 +4,35 @@
 
 ---
 
-## 🧱 Bundle Structure
+## 🛠️ Installation
+
+To install MacOsPublish as a global .NET tool:
+
+```bash
+dotnet tool install --global MacOsPublish
+```
+
+Or update:
+
+```bash
+dotnet tool update --global MacOsPublish
+```
+
+You can also install it locally in your project:
+
+```bash
+dotnet tool install MacOsPublish
+```
+
+---
+
+To check if the tool is available:
+
+```bash
+MacOsPublish --help
+```
+
+## 🧱 Bundle Structure Generated
 
 ```
 YourApp.app
@@ -42,7 +70,7 @@ MacOsPublish <PROJECT> [<OUTPUT_DIR>] [<SIGNING_IDENTITY>] [<INSTALLER_IDENTITY>
 
 ## 🔐 Notarization Setup
 
-Before using `--notarize`, run once:
+To notarize your app, first store your credentials:
 
 ```bash
 xcrun notarytool store-credentials --apple-id <email> --team-id <TEAM_ID> --password <app-password> --keychain-profile "MacOsPublishProfile"
@@ -51,7 +79,15 @@ xcrun notarytool store-credentials --apple-id <email> --team-id <TEAM_ID> --pass
 You can then use:
 
 ```bash
---notarize MacOsPublishProfile
+macospublish YourApp.csproj --notarize MacOsPublishProfile
+```
+
+---
+
+## 🔗 Example
+
+```bash
+macospublish MyApp.csproj publish/MyApp "Developer ID Application: Your Name (TEAMID)" "Developer ID Installer: Your Name (TEAMID)" --notarize MacOsPublishProfile
 ```
 
 ---
