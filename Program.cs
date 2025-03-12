@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using System.Security.Cryptography;
 
 namespace MacOsPublish;
@@ -23,11 +24,16 @@ namespace MacOsPublish;
             └── Info.plist
 */
 
-class Program
+static class Program
 {
     static async Task Main(string[] args)
     {
-        Console.WriteLine("MacOsPublish V1.0 - Copyright (C) 2025 Castello Branco Technologia LTDA");
+        string? version = Assembly
+            .GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion;
+        
+        Console.WriteLine($"MacOsPublish V{version} - Copyright (C) 2025 Castello Branco Technologia LTDA");
 
         Stopwatch sw = Stopwatch.StartNew();
 
@@ -64,7 +70,21 @@ class Program
 
                 return;
             }
+            
+            string projectDir = Path.GetDirectoryName(projectFileName) ?? Directory.GetCurrentDirectory();
 
+            string plistDir = projectDir;
+            
+            int indexPlist = Array.IndexOf(args, "--plist-dir");
+
+            if (indexPlist >= 0)
+            {
+                if (indexPlist < args.Length - 1)
+                {
+                    plistDir = args[indexPlist + 1];
+                }
+            }
+            
             if (!args.Contains("--no-restore"))
             {
                 Console.WriteLine("[INFO] Restoring NuGet packages...");
@@ -110,7 +130,15 @@ class Program
 
             foreach (string configuration in new[] { "Debug", "Release" })
             {
-                if (! await GenerateBundleAsync(configuration, projectFileName, outputDir, signIdentity, installerIdentity, notarize, profile))
+                if (! await GenerateBundleAsync(configuration, 
+                                                projectFileName, 
+                                                outputDir, 
+                                                signIdentity, 
+                                                installerIdentity, 
+                                                notarize, 
+                                                profile, 
+                                                plistDir,
+                                                projectDir))
                 {
                     Environment.Exit(-1);
 
@@ -171,6 +199,8 @@ Argumentos:
                               If <AppleProfile> is not provided, defaults to ""MacOsPublishProfile""
 
   --no-restore                Skip nuget restore.
+
+  --plist-dir  <path>         the directory of plist files (info/entitlements) if not in current directory.  
 
   -?, -h, --help       Mostrar a ajuda da linha de comando.
 
@@ -313,7 +343,15 @@ Argumentos:
         return true;
     }
 
-    private static async Task<bool> GenerateBundleAsync(string configuration, string projectFileName, string outputDir, string signIdentity, string installerIdentity, bool notarize, string profile)
+    private static async Task<bool> GenerateBundleAsync(string configuration, 
+                                                        string projectFileName, 
+                                                        string outputDir, 
+                                                        string signIdentity, 
+                                                        string installerIdentity, 
+                                                        bool notarize, 
+                                                        string profile, 
+                                                        string plistDir,
+                                                        string projectDir)
     {
         string version = DateTime.Now.ToString("yy.MM.dd.HHmm");
         
@@ -369,16 +407,29 @@ fi";
         await File.WriteAllTextAsync(executableScript, executableScriptHost);
         
         await RunCommandAsync("chmod", $"+x \"{executableScript}\" ");
-        
-        File.Copy("Info.plist", Path.Combine(contentsDir, "Info.plist"));
 
-        if (File.Exists("Entitlements.plist"))
+        string pListFileName = Path.Combine(plistDir, "Info.pList");
+
+        if (!File.Exists(pListFileName))
         {
-            File.Copy("Entitlements.plist", Path.Combine(contentsDir, "Entitlements.plist"));
+            Console.WriteLine($"[ERROR] pList file {pListFileName} not exist.");
+
+            return false;
         }
         
-        if (Directory.Exists("Assets"))
-            CopyDirectory("Assets", resourcesDir);
+        File.Copy(Path.Combine(plistDir, "Info.plist"), Path.Combine(contentsDir, "Info.plist"));
+
+        string entitlementsFileName = Path.Combine(plistDir, "Entitlements.plist");
+        
+        if (File.Exists(entitlementsFileName))
+        {
+            File.Copy(entitlementsFileName, Path.Combine(contentsDir, "Entitlements.plist"));
+        }
+        
+        string assetsDirName = Path.Combine(projectDir, "Assets");
+        
+        if (Directory.Exists(assetsDirName))
+            CopyDirectory(assetsDirName, resourcesDir);
         
         Task<bool>[] publishTasks = [
             PublishRidAsync("osx-x64", configuration, version, macOsDir),
@@ -394,7 +445,7 @@ fi";
 
         (int exitCode, string output, string error) ret;
         
-        if (File.Exists("Entitlements.plist"))
+        if (File.Exists(entitlementsFileName))
         {
             ret = await Program.RunCommandAsync ("/usr/libexec/PlistBuddy",
                              $"-c \"Set :CFBundleVersion {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ");
