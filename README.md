@@ -63,21 +63,21 @@ YourApp.app
 ## ⚙️ Usage
 
 ```bash
-MacOsPublish <PROJECT> [<OUTPUT_DIR>] [<SIGNING_IDENTITY>] [<INSTALLER_IDENTITY>] [--notarize <PROFILE>] [--no-restore]
+MacOsPublish <PROJECT>  [...options]
 ```
 
 ### Arguments
 
-| Argument                | Description                                                                 |
-|-------------------------|-----------------------------------------------------------------------------|
-| `<PROJECT>`             | Path to `.csproj` or `.sln` file.                                           |
-| `[OUTPUT_DIR]`          | Destination output folder (default: `bin/UniversalBundleApp`).              |
-| `[SIGNING_IDENTITY]`    | Apple Developer identity. Empty to skip code signing.                       |
-| `[INSTALLER_IDENTITY]`  | Apple Installer identity (used for `.pkg` generation).                      |
-| `--notarize <PROFILE>`  | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.     |
-| `--plist-dir  <path>`   | the directory of plist files (info/entitlements) if not in current dir.`.   |
-| `--no-restore`         | Skip `dotnet restore`.                                                      |
-| `-h`, `--help`         | Display help.                                                               |
+| Argument                                    | Description                                                                 |
+|---------------------------------------------|-----------------------------------------------------------------------------|
+| `<PROJECT>`                                 | Path to `.csproj` or `.sln` file.                                           |
+| `--output <OUTPUT_DIR>`                     | Destination output folder (default: `bin/UniversalBundleApp`).              |
+| `--identity <SIGNING_IDENTITY>`             | Apple Developer identity. Empty to skip code signing.                       |
+| `--installer-identity <INSTALLER_IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                      |
+| `--notarize <PROFILE>`                      | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.     |
+| `--plist-dir <path>`                        | the directory of plist files (info/entitlements) if not in current dir.`.   |
+| `--no-restore`                              | Skip `dotnet restore`.                                                      |
+| `-h`, `--help`                              | Display help.                                                               |
 
 ---
 

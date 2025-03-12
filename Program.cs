@@ -105,14 +105,44 @@ static class Program
                 }
             }
 
-            string outputDir = args.Length >= 2 ? args[1] : "bin/UniversalBundleApp";
+            string outputDir = "bin/UniversalBundleApp";
+
+            int indexOutput = Array.IndexOf(args, "--output");
+
+            if (indexOutput >= 0)
+            {
+                if (indexOutput < args.Length - 1)
+                {
+                    outputDir = args[indexOutput + 1];
+                }
+            }
             
             Directory.CreateDirectory(outputDir);
 
-            string signIdentity = args.Length >= 3 ? args[2] : "";
+            string signIdentity = "";
 
-            string installerIdentity = args.Length >= 4 ? args[3] : "";
+            int indexIdentity = Array.IndexOf(args, "--identity");
 
+            if (indexIdentity >= 0)
+            {
+                if (indexIdentity < args.Length - 1)
+                {
+                    signIdentity = args[indexIdentity + 1];
+                }
+            }
+            
+            string installerIdentity = "";
+
+            int indexInstallerIdentity = Array.IndexOf(args, "--installer-identity");
+
+            if (indexInstallerIdentity >= 0)
+            {
+                if (indexInstallerIdentity < args.Length - 1)
+                {
+                    installerIdentity = args[indexInstallerIdentity + 1];
+                }
+            }
+            
             bool notarize = false;
             string profile = "MacOsPublishProfile";
 
