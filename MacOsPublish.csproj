@@ -8,14 +8,14 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>macospublish</ToolCommandName>
         <PackageId>MacOsPublish</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Cesar Murilo Castello Branco Filho</Authors>
         <Company>Castello Branco Tecnologia LTDA</Company>
         <Description>Publish and bundle .NET apps for macOS</Description>
         <PackageTags>macos;dotnet;publish;bundle;notarization;dmg;osx</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/CastelloBranco/MacOsPublish</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/CastelloBranco/MacOsPublish</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/CastelloBrancoTecnologia/MacOsPublish</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/CastelloBrancoTecnologia/MacOsPublish</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <ToolCommandName>macospublish</ToolCommandName>

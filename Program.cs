@@ -211,6 +211,11 @@ Argumentos:
     ⚠️ You only need to run this once. 
     After that, you can pass --notarize in MacOsPublish and it will use the saved credentials. 
 
+   Get this tool at:
+        https://www.nuget.org/packages/MacOsPublish
+
+   Contribute to project at:
+        https://github.com/CastelloBrancoTecnologia/MacOsPublish
 "); 
             
         Environment.Exit(-1);

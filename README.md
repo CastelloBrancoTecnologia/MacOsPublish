@@ -4,6 +4,18 @@
 
 ---
 
+## 🕸️ Projet Web site
+
+https://github.com/CastelloBrancoTecnologia/MacOsPublish
+
+---
+
+## 📦 nuget package 
+
+https://www.nuget.org/packages/MacOsPublish
+
+---
+
 ## 🛠️ Installation
 
 To install MacOsPublish as a global .NET tool:
