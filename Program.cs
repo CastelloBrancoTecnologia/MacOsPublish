@@ -443,7 +443,7 @@ Argumentos:
             Console.WriteLine($"DryRun - Created directory {bundleDir}.");
         }
         
-        string contentsDir = Path.Combine(bundleDir, projectName);
+        string contentsDir = Path.Combine(bundleDir, "Contents");
 
         if (!dryRun)
         {
