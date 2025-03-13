@@ -57,14 +57,14 @@ static class Program
                 ! projectFileName.EndsWith(".sln", StringComparison.OrdinalIgnoreCase) )
             {
                 
-                Console.WriteLine("O arquivo deve ser um .csproj ou .sln válido.");
+                Console.WriteLine("Project must be an valid .csproj or .sln file.");
 
                 return;
             }
 
             if (!File.Exists(projectFileName))
             {
-                Console.WriteLine("Projeto não encontrado");
+                Console.WriteLine("Project not found");
 
                 ShowHelp();
 
@@ -423,7 +423,9 @@ Argumentos:
         
         string projectName = Path.GetFileNameWithoutExtension(projectFileName);
         
-        string bundleDir = Path.Combine(outputDir, configuration, projectName, ".app");
+        string bundleName = $"{projectName}.app";
+        
+        string bundleDir = Path.Combine(outputDir, configuration, bundleName);
 
         Console.WriteLine($"Generating bundle {bundleDir}.");
 
