@@ -32,15 +32,13 @@ Arguments:
   -- output &lt;OUTPUT_DIR&gt;                                  The output directory where the bundle will be generated.
                                                                              If not specified, it defaults to bin/UniversalBundleApp
 
-  --signing &lt;SIGNING_IDENTITY&gt;                          The Apple Developer signing identity.
+  --signing &lt;IDENTITY&gt;                          The Apple Developer signing identity.
                                                                               If empty, the application will not be signed.
 
-  --installer-identity &lt;INSTALLER_IDENTITY&gt;         The Apple Installer identity.
+  --installer-identity &lt;IDENTITY&gt;         The Apple Installer identity.
 
   --notarize &lt;AppleProfile&gt;                                    Notarize the app using Apple Notary Service.
                                                                               If &lt;AppleProfile&gt; is not provided, defaults to "MacOsPublishProfile"
-
-  --no-restore                                                        Skip NuGet restore.
 
   --plist-dir &lt;path&gt;                                                The directory where Info.plist and Entitlements.plist are located.
                                                                               If not set, uses the current directory.

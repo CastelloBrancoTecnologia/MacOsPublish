@@ -25,15 +25,13 @@ Argumentos:
   --output &lt;DIRETÓRIO_SAÍDA&gt;                           O diretório de saída onde o bundle será gerado.
                                                                             Se não especificado, o padrão é bin/UniversalBundleApp
 
-  --signing &lt;IDENTIDADE_ASSINATURA&gt;             A identidade de assinatura do desenvolvedor Apple.
+  --signing &lt;IDENTIDADE&gt;             A identidade de assinatura do desenvolvedor Apple.
                                                                             Se estiver vazio, o aplicativo não será assinado.
 
-  --installer-identity &lt;IDENTIDADE_INSTALADOR&gt;  A identidade do instalador Apple.
+  --installer-identity &lt;IDENTIDADE&gt;  A identidade do instalador Apple.
 
   --notarize &lt;PerfilApple&gt;                                      Notariza o app usando o serviço Apple Notary.
                                                                               Se &lt;PerfilApple&gt; não for informado, o padrão é "MacOsPublishProfile"
-
-  --no-restore                                                        Pula a restauração do NuGet.
 
   --plist-dir &lt;caminho&gt;                                          Diretório onde estão os arquivos Info.plist e Entitlements.plist.
                                                                              Se não definido, usa o diretório atual.

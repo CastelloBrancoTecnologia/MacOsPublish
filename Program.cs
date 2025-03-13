@@ -29,7 +29,7 @@ namespace MacOsPublish;
 [SuppressMessage("ReSharper", "LocalizableElement")]
 static class Program
 {
-    public static string StripInformationalVersionGitHash(string version)
+    private static string StripInformationalVersionGitHash(string version)
     {
         if (string.IsNullOrWhiteSpace(version))
             return version;
@@ -46,7 +46,7 @@ static class Program
     
     static async Task Main(string[] args)
     {
-        string? macOsPublishVersion = StripInformationalVersionGitHash(Assembly
+        string macOsPublishVersion = StripInformationalVersionGitHash(Assembly
             .GetExecutingAssembly()
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
             ?.InformationalVersion ?? "");
@@ -111,26 +111,6 @@ static class Program
                     plistDir = args[indexPlist + 1];
                 }
             }
-            
-            // if (!args.Contains("--no-restore"))
-            // {
-            //     Console.WriteLine("[INFO] Restoring NuGet packages...");
-            //
-            //     (int exitCode, string output, string error)
-            //         restore = await Program.RunCommandAsync("dotnet", $"restore \"{projectFileName}\"");
-            //
-            //     if (restore.exitCode != 0)
-            //     {
-            //         Console.ForegroundColor = ConsoleColor.Red;
-            //         Console.WriteLine("[ERROR] Failed to restore project.");
-            //         Console.WriteLine(restore.error);
-            //         Console.ResetColor();
-            //
-            //         Environment.Exit(-1);
-            //
-            //         return;
-            //     }
-            // }
             
             string outputDir = "bin/UniversalBundleApp";
 
@@ -200,7 +180,9 @@ static class Program
                 }
             }
 
-            foreach (string configuration in new[] { "Debug", "Release" })
+            string[] configurations = ["Debug", "Release"];
+            
+            foreach (string configuration in configurations)
             {
                 if (! await GenerateBundleAsync(configuration, 
                                                 projectFileName, 
@@ -308,27 +290,30 @@ static class Program
         return (process.ExitCode, outputBuilder.ToString(), errorBuilder.ToString());
     }
     
-    private static void CopyDirectory(string sourceDir, string destinationDir)
+    private static async Task CopyDirectoryAsync(string sourceDir, string destinationDir)
     {
         if (string.IsNullOrWhiteSpace(sourceDir))
             sourceDir = Directory.GetCurrentDirectory();
-        
+
         if (string.IsNullOrWhiteSpace(destinationDir))
             destinationDir = Directory.GetCurrentDirectory();
-        
+
         Directory.CreateDirectory(destinationDir);
-        
+
         foreach (string file in Directory.GetFiles(sourceDir))
         {
             string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
-            File.Copy(file, destFile, true); // Overwrites if exists
+
+            // Use async file copy
+            await using FileStream sourceStream = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read);
+            await using FileStream destStream = File.Create(destFile);
+            await sourceStream.CopyToAsync(destStream);
         }
-        
+
         foreach (string subDir in Directory.GetDirectories(sourceDir))
         {
             string destSubDir = Path.Combine(destinationDir, Path.GetFileName(subDir));
-            
-            CopyDirectory(subDir, destSubDir);
+            await CopyDirectoryAsync(subDir, destSubDir);
         }
     }
     
@@ -389,7 +374,7 @@ static class Program
         
         if (!dryRun)
         {
-            CopyDirectory($"bin/{configuration}/{rid}/publish", dest);
+            await CopyDirectoryAsync($"bin/{configuration}/{rid}/publish", dest);
         }
         else
         {
@@ -567,7 +552,7 @@ fi";
         if (!dryRun)
         {
             if (Directory.Exists(assetsDirName))
-                CopyDirectory(assetsDirName, resourcesDir);
+                await CopyDirectoryAsync(assetsDirName, resourcesDir);
         }
         else
         {

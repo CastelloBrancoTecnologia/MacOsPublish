@@ -77,18 +77,17 @@ macospublish <PROJECT>  [...options]
 
 ### Arguments
 
-| Argument                                    | Description                                                               |
-|---------------------------------------------|---------------------------------------------------------------------------|
-| `<PROJECT>`                                 | Path to `.csproj` or `.sln` file.                                         |
-| `--output <OUTPUT_DIR>`                     | Destination output folder (default: `bin/UniversalBundleApp`).            |
-| `--identity <SIGNING_IDENTITY>`             | Apple Developer identity. Empty to skip code signing.                     |
-| `--installer-identity <INSTALLER_IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                    |
-| `--notarize <PROFILE>`                      | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.   |
-| `--plist-dir <path>`                        | the directory of plist files (info/entitlements) if not in current dir.`. |
-| `--AssemblyVersion <version>`               | the version to put in AssemblyVersion.                                    |
-| `--no-restore`                              | Skip `dotnet restore`.                                                    |
-| `--dry-run`                                 | Dont Generate Any Files.                                                  |
-| `-h`, `--help`                              | Display help.                                                             |
+| Argument                          | Description                                                               |
+|-----------------------------------|---------------------------------------------------------------------------|
+| `<PROJECT>`                       | Path to `.csproj` or `.sln` file.                                         |
+| `--output <OUTPUT_DIR>`           | Destination output folder (default: `bin/UniversalBundleApp`).            |
+| `--identity <IDENTITY>`           | Apple Developer identity. Empty to skip code signing.                     |
+| `--installer-identity <IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                    |
+| `--notarize <PROFILE>`            | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.   |
+| `--plist-dir <path>`              | the directory of plist files (info/entitlements) if not in current dir.`. |
+| `--AssemblyVersion <version>`     | the version to put in AssemblyVersion.                                    |
+| `--dry-run`                       | Dont Generate Any Files.                                                  |
+| `-h`, `--help`                    | Display help.                                                             |
 
 ---
 
