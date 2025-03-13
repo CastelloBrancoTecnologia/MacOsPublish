@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v9.0": {
-      "MacOsPublish/1.1.1": {
+      "MacOsPublish/1.1.2": {
         "runtime": {
           "MacOsPublish.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "MacOsPublish/1.1.1": {
+    "MacOsPublish/1.1.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
