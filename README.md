@@ -32,6 +32,15 @@ dotnet tool update --global MacOsPublish
 
 You can also install it locally in your project:
 
+OBS: If you cant run macospublish after installation please check if you path isnt configured 
+
+You can configure path if your shell is zsh with command like 
+
+```bash
+    echo 'export PATH=&quot;$PATH:$HOME/.dotnet/tools&quot;' &gt;&gt; ~/.zshrc
+```
+
+
 ```bash
 dotnet tool install MacOsPublish
 ```
@@ -41,7 +50,7 @@ dotnet tool install MacOsPublish
 To check if the tool is available:
 
 ```bash
-MacOsPublish --help
+macospublish --help
 ```
 
 ## 🧱 Bundle Structure Generated
@@ -63,21 +72,22 @@ YourApp.app
 ## ⚙️ Usage
 
 ```bash
-MacOsPublish <PROJECT>  [...options]
+macospublish <PROJECT>  [...options]
 ```
 
 ### Arguments
 
-| Argument                                    | Description                                                                 |
-|---------------------------------------------|-----------------------------------------------------------------------------|
-| `<PROJECT>`                                 | Path to `.csproj` or `.sln` file.                                           |
-| `--output <OUTPUT_DIR>`                     | Destination output folder (default: `bin/UniversalBundleApp`).              |
-| `--identity <SIGNING_IDENTITY>`             | Apple Developer identity. Empty to skip code signing.                       |
-| `--installer-identity <INSTALLER_IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                      |
-| `--notarize <PROFILE>`                      | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.     |
-| `--plist-dir <path>`                        | the directory of plist files (info/entitlements) if not in current dir.`.   |
-| `--no-restore`                              | Skip `dotnet restore`.                                                      |
-| `-h`, `--help`                              | Display help.                                                               |
+| Argument                                    | Description                                                               |
+|---------------------------------------------|---------------------------------------------------------------------------|
+| `<PROJECT>`                                 | Path to `.csproj` or `.sln` file.                                         |
+| `--output <OUTPUT_DIR>`                     | Destination output folder (default: `bin/UniversalBundleApp`).            |
+| `--identity <SIGNING_IDENTITY>`             | Apple Developer identity. Empty to skip code signing.                     |
+| `--installer-identity <INSTALLER_IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                    |
+| `--notarize <PROFILE>`                      | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.   |
+| `--plist-dir <path>`                        | the directory of plist files (info/entitlements) if not in current dir.`. |
+| `--no-restore`                              | Skip `dotnet restore`.                                                    |
+| `--dry-run`                                 | Dont Generate Any Files.                                                  |
+| `-h`, `--help`                              | Display help.                                                             |
 
 ---
 

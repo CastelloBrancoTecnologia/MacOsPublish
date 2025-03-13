@@ -73,6 +73,15 @@ static class Program
             
             string projectDir = Path.GetDirectoryName(projectFileName) ?? Directory.GetCurrentDirectory();
 
+            bool dryRun = false;
+
+            if (args.Contains("--dry-run"))
+            {
+                dryRun = true;
+                
+                Console.WriteLine("[INFO] Dry run mode. None files will be generated...");
+            }
+            
             string plistDir = projectDir;
             
             int indexPlist = Array.IndexOf(args, "--plist-dir");
@@ -104,7 +113,7 @@ static class Program
                     return;
                 }
             }
-
+            
             string outputDir = "bin/UniversalBundleApp";
 
             int indexOutput = Array.IndexOf(args, "--output");
@@ -116,8 +125,11 @@ static class Program
                     outputDir = args[indexOutput + 1];
                 }
             }
-            
-            Directory.CreateDirectory(outputDir);
+
+            if (!dryRun)
+            {
+                Directory.CreateDirectory(outputDir);
+            }
 
             string signIdentity = "";
 
@@ -168,7 +180,8 @@ static class Program
                                                 notarize, 
                                                 profile, 
                                                 plistDir,
-                                                projectDir))
+                                                projectDir, 
+                                                dryRun))
                 {
                     Environment.Exit(-1);
 
@@ -231,6 +244,8 @@ Argumentos:
   --no-restore                Skip nuget restore.
 
   --plist-dir  <path>         the directory of plist files (info/entitlements) if not in current directory.  
+
+  --dry-run                   Dont generate any files
 
   -?, -h, --help       Mostrar a ajuda da linha de comando.
 
@@ -327,7 +342,7 @@ Argumentos:
         }
     }
     
-    private static async Task<bool> PublishRidAsync(string rid, string configuration, string version, string macOsDir)
+    private static async Task<bool> PublishRidAsync(string rid, string configuration, string version, string macOsDir, bool dryRun)
     {
         bool publishReadyToRun = false;
         bool tieredCompilation = false;
@@ -353,25 +368,40 @@ Argumentos:
         
         Console.WriteLine($"Publishing for RID: {rid}");
 
-        (int exitCode, string output, string error) ret = await RunCommandAsync(cmd, args);
-
-        Console.WriteLine(ret.output);
-
-        if (ret.exitCode != 0)
+        if (!dryRun)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"[ERROR] Publish failed for {rid}:");
-            Console.WriteLine(ret.error);
-            Console.ResetColor();
-            return false;
-        }
+            (int exitCode, string output, string error) ret = await RunCommandAsync(cmd, args);
+            
+            Console.WriteLine(ret.output);
 
+            if (ret.exitCode != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[ERROR] Publish failed for {rid}:");
+                Console.WriteLine(ret.error);
+                Console.ResetColor();
+                return false;
+            }
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - executing: {cmd} {args}"); 
+        }
+        
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"Publish for {rid} succeeded.");
         Console.ResetColor();
 
-        CopyDirectory($"bin/{configuration}/{rid}/publish",
-            Path.Combine(macOsDir, rid));
+        string dest = Path.Combine(macOsDir, rid);
+        
+        if (!dryRun)
+        {
+            CopyDirectory($"bin/{configuration}/{rid}/publish", dest);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Copied bin/{configuration}/{rid}/publish to {dest}.");
+        }
 
         await Task.Delay(500);
         
@@ -386,7 +416,8 @@ Argumentos:
                                                         bool notarize, 
                                                         string profile, 
                                                         string plistDir,
-                                                        string projectDir)
+                                                        string projectDir,
+                                                        bool dryRun)
     {
         string version = DateTime.Now.ToString("yy.MM.dd.HHmm");
         
@@ -395,36 +426,87 @@ Argumentos:
         string bundleDir = Path.Combine(outputDir, configuration, projectName, ".app");
 
         Console.WriteLine($"Generating bundle {bundleDir}.");
-        
-        if (Directory.Exists(bundleDir))
-            Directory.Delete(bundleDir, recursive: true);
-        
-        Directory.CreateDirectory(bundleDir);
+
+        if (!dryRun)
+        {
+            if (Directory.Exists(bundleDir))
+                Directory.Delete(bundleDir, recursive: true);
+
+            Directory.CreateDirectory(bundleDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Removed directory {bundleDir} if exist.");
+
+            Console.WriteLine($"DryRun - Created directory {bundleDir}.");
+        }
         
         string contentsDir = Path.Combine(bundleDir, projectName);
-        
-        Directory.CreateDirectory(contentsDir);
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(contentsDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {contentsDir}.");
+        }
 
         string macOsDir = Path.Combine(contentsDir, "MacOS");
-        
-        Directory.CreateDirectory(macOsDir);
-        
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(macOsDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {macOsDir}.");
+        }
+
         string macOsX64Dir = Path.Combine(macOsDir, "osx-x64");
-        
-        Directory.CreateDirectory(macOsX64Dir);
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(macOsX64Dir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {macOsX64Dir}.");
+        }
 
         string macOsArm64Dir = Path.Combine(macOsDir, "osx-arm64");
-        
-        Directory.CreateDirectory(macOsArm64Dir);
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(macOsArm64Dir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {macOsArm64Dir}.");
+        }
 
         string macOsSharedDir = Path.Combine(macOsDir, "shared");
-        
-        Directory.CreateDirectory(macOsSharedDir);
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(macOsSharedDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {macOsSharedDir}.");
+        }
 
         string resourcesDir = Path.Combine(contentsDir, "Resources");
-        
-        Directory.CreateDirectory(resourcesDir);
-        
+
+        if (!dryRun)
+        {
+            Directory.CreateDirectory(resourcesDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created directory {resourcesDir}.");
+        }
+
         string executableScriptHost =
             $@"#!/bin/sh
 
@@ -438,10 +520,19 @@ else
 fi";
 
         string executableScript = Path.Combine(macOsDir, $"{projectName}.sh");
-            
-        await File.WriteAllTextAsync(executableScript, executableScriptHost);
-        
-        await RunCommandAsync("chmod", $"+x \"{executableScript}\" ");
+
+        if (!dryRun)
+        {
+            await File.WriteAllTextAsync(executableScript, executableScriptHost);
+
+            await RunCommandAsync("chmod", $"+x \"{executableScript}\" ");
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Created script {executableScript}.");
+
+            Console.WriteLine($"DryRun - Assigned +x exec attribute to script {executableScript}.");
+        }
 
         string pListFileName = Path.Combine(plistDir, "Info.pList");
 
@@ -452,23 +543,46 @@ fi";
             return false;
         }
         
-        File.Copy(Path.Combine(plistDir, "Info.plist"), Path.Combine(contentsDir, "Info.plist"));
+        string destplist = Path.Combine(contentsDir, "Info.plist");
+            
+        if (!dryRun)
+        {
+            File.Copy(pListFileName, destplist);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Copied plist file {pListFileName} to {destplist}.");
+        }
 
         string entitlementsFileName = Path.Combine(plistDir, "Entitlements.plist");
-        
-        if (File.Exists(entitlementsFileName))
+        string destEntitlementsFile = Path.Combine(contentsDir, "Entitlements.plist");
+        if (!dryRun)
         {
-            File.Copy(entitlementsFileName, Path.Combine(contentsDir, "Entitlements.plist"));
+            if (File.Exists(entitlementsFileName))
+            {
+                File.Copy(entitlementsFileName, destEntitlementsFile);
+            }
         }
-        
+        else
+        {
+            Console.WriteLine($"DryRun - Copied entitlements file {entitlementsFileName} to {destEntitlementsFile}.");
+        }
+
         string assetsDirName = Path.Combine(projectDir, "Assets");
-        
-        if (Directory.Exists(assetsDirName))
-            CopyDirectory(assetsDirName, resourcesDir);
-        
+
+        if (!dryRun)
+        {
+            if (Directory.Exists(assetsDirName))
+                CopyDirectory(assetsDirName, resourcesDir);
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Copied assets directory {assetsDirName} to {resourcesDir}.");
+        }
+
         Task<bool>[] publishTasks = [
-            PublishRidAsync("osx-x64", configuration, version, macOsDir),
-            PublishRidAsync("osx-arm64", configuration, version, macOsDir)
+            PublishRidAsync("osx-x64", configuration, version, macOsDir, dryRun),
+            PublishRidAsync("osx-arm64", configuration, version, macOsDir, dryRun)
         ];
 
         bool[] results = await Task.WhenAll(publishTasks);
@@ -476,48 +590,74 @@ fi";
         if (!results.All(success => success))
             return false;
 
-        DeduplicateAndLinkCommonFiles(macOsX64Dir, macOsArm64Dir, macOsSharedDir);
+        if (!dryRun)
+        {
+            DeduplicateAndLinkCommonFiles(macOsX64Dir, macOsArm64Dir, macOsSharedDir);
+        }
+        else
+        {
+            Console.WriteLine("DryRun - Deduplicate and link common files.");
+        }
 
         (int exitCode, string output, string error) ret;
-        
+
         if (File.Exists(entitlementsFileName))
         {
-            ret = await Program.RunCommandAsync ("/usr/libexec/PlistBuddy",
-                             $"-c \"Set :CFBundleVersion {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ");
-            
-            Console.WriteLine(ret.output);
 
-            if (ret.exitCode != 0)
+            string cmd = "/usr/libexec/PlistBuddy";
+            string args = $"-c \"Set :CFBundleVersion {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
+
+            if (!dryRun)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Entitlements apply Failed!");
-                Console.WriteLine(ret.error);
+                ret = await Program.RunCommandAsync(cmd, args);
+
+                Console.WriteLine(ret.output);
+
+                if (ret.exitCode != 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Entitlements apply Failed!");
+                    Console.WriteLine(ret.error);
+                }
             }
-            
-            ret = await Program.RunCommandAsync("/usr/libexec/PlistBuddy",
-                $"-c \"Set :CFBundleShortVersionString {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ");
-
-            Console.WriteLine(ret.output);
-
-            if (ret.exitCode != 0)
+            else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Entitlements apply Failed!");
-                Console.WriteLine(ret.error);
+                Console.WriteLine("DryRun - Executing {cmd} {args}.");
+            }
+
+            args = $"-c \"Set :CFBundleShortVersionString {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
+            if (!dryRun)
+            {
+                ret = await Program.RunCommandAsync(cmd, args);
+
+                Console.WriteLine(ret.output);
+
+                if (ret.exitCode != 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Entitlements apply Failed!");
+                    Console.WriteLine(ret.error);
+                }
+            }
+            else
+            {
+                Console.WriteLine("DryRun - Executing {cmd} {args}.");
             }
         }
         
         if (!string.IsNullOrWhiteSpace(signIdentity))
         {
-                Console.WriteLine("[INFO] Starting code signing...");
+            Console.WriteLine("[INFO] Starting code signing...");
 
-                foreach (string file in Directory.EnumerateFiles(macOsDir, "*", SearchOption.AllDirectories))
+            foreach (string file in Directory.EnumerateFiles(macOsDir, "*", SearchOption.AllDirectories))
+            {
+                if (File.Exists(file))
                 {
-                    if (File.Exists(file))
-                    {
-                        Console.WriteLine($"[INFO] Signing {file}");
+                    Console.WriteLine($"[INFO] Signing {file}");
 
-                        ret = await Program.RunCommandAsync("codesign", 
+                    if (!dryRun)
+                    {
+                        ret = await Program.RunCommandAsync("codesign",
                             $"--force --timestamp --sign \"{signIdentity}\" \"{file}\"");
 
                         if (ret.exitCode != 0)
@@ -526,14 +666,21 @@ fi";
                             Console.WriteLine($"[ERROR] Failed to sign file: {file}");
                             Console.WriteLine(ret.error);
                             Console.ResetColor();
-                            
+
                             return false;
                         }
                     }
+                    else
+                    {
+                        Console.WriteLine($"DryRun - executeing codesign to signing {file}");
+                    }
                 }
+            }
 
-                Console.WriteLine($"[INFO] Signing bundle: {bundleDir}");
-                
+            Console.WriteLine($"[INFO] Signing bundle: {bundleDir}");
+
+            if (!dryRun)
+            {
                 ret = await Program.RunCommandAsync("codesign",
                     $"--force --timestamp --entitlements \"{Path.Combine(contentsDir, "Entitlements.plist")}\" --sign \"{signIdentity}\" \"{bundleDir}\"");
 
@@ -545,36 +692,64 @@ fi";
                     Console.ResetColor();
                     return false;
                 }
-                
-                ret = await Program.RunCommandAsync("codesign", $"--verify --deep --strict --verbose=2 \"{bundleDir}\"");
+            }
+            else
+            {
+                Console.WriteLine($"DryRun - Executing codesign to sign bundle {bundleDir}.");
+            }
+
+            if (!dryRun)
+            {
+                ret = await Program.RunCommandAsync("codesign",
+                    $"--verify --deep --strict --verbose=2 \"{bundleDir}\"");
+
                 if (ret.exitCode != 0)
                 {
                     Console.WriteLine("[WARN] Bundle codesign verification failed.");
                     Console.WriteLine(ret.error);
                 }
+            }
+            else
+            {
+                Console.WriteLine($"DryRun - Executing codesign to verify bundle {bundleDir}.");
+            }
 
+            if (!dryRun)
+            {
                 ret = await Program.RunCommandAsync("spctl", $"--assess --type execute --verbose=4 \"{bundleDir}\"");
                 if (ret.exitCode != 0)
                 {
                     Console.WriteLine("[WARN] Bundle not accepted by Gatekeeper.");
                     Console.WriteLine(ret.error);
                 }
+            }
+            else
+            {
+                Console.WriteLine($"DryRun - Executing spctl to notarize and verify gatekeeper..");
+            }
         }
 
         if (!string.IsNullOrWhiteSpace(installerIdentity))
         {
             string pkgPath = Path.Combine(outputDir, $"{projectName}-{version}-{configuration}.pkg");
-           
-            ret = await Program.RunCommandAsync("productbuild",
-                $"--version {version} --component \"{bundleDir}\" /Applications \"{pkgPath}\" --sign \"{installerIdentity}\" ");
-            
-            if (ret.exitCode != 0)
+
+            if (!dryRun)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[ERROR] Failed to generate pkg installer.");
-                Console.WriteLine(ret.error);
-                Console.ResetColor();
-                return false;
+                ret = await Program.RunCommandAsync("productbuild",
+                    $"--version {version} --component \"{bundleDir}\" /Applications \"{pkgPath}\" --sign \"{installerIdentity}\" ");
+
+                if (ret.exitCode != 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("[ERROR] Failed to generate pkg installer.");
+                    Console.WriteLine(ret.error);
+                    Console.ResetColor();
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"DryRun - Executing productbuild to generate pkg installer.");
             }
         }
         
@@ -582,50 +757,86 @@ fi";
 
         if (!File.Exists(applicationsLink))
         {
-            var (exitCode, _, err) = await Program.RunCommandAsync("ln", $"-s /Applications \"{applicationsLink}\"");
-
-            if (exitCode != 0)
+            if (!dryRun)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("[WARN] Failed to create /Applications shortcut for DMG:");
-                Console.WriteLine(err);
-                Console.ResetColor();
+                var (exitCode, _, err) =
+                    await Program.RunCommandAsync("ln", $"-s /Applications \"{applicationsLink}\"");
+
+                if (exitCode != 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("[WARN] Failed to create /Applications shortcut for DMG:");
+                    Console.WriteLine(err);
+                    Console.ResetColor();
+                }
+            }
+            else
+            {
+                Console.WriteLine($"DryRun - Created applications link to {applicationsLink}.");
             }
         }
         
         // Exclui arquivos ".DS_Store" que nao devem ir para dmgs
-        
-        await RunCommandAsync("find", $"\"{outputDir}\" -name .DS_Store -delete");
-        
+
+        if (!dryRun)
+        {
+            await RunCommandAsync("find", $"\"{outputDir}\" -name .DS_Store -delete");
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Deleted DS_Store files on bundle.");
+        }
+
         string dmgName = $"{projectName}-{version}.dmg";
         string dmgPath = Path.Combine(outputDir, "..", dmgName); // Store .dmg *outside* the folder
 
         Console.WriteLine($"[INFO] Creating DMG: {dmgPath}");
 
         // hdiutil create -volname "AppName" -srcfolder "path/to/.app" -ov -format UDZO output.dmg
-        
-        ret = await Program.RunCommandAsync("hdiutil",
-            $"create -volname \"{projectName}\" -srcfolder \"{outputDir}\" -ov -format UDZO \"{dmgPath}\"");
-        
-        if (ret.exitCode != 0)
+
+        if (!dryRun)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[ERROR] Failed to create DMG.");
-            Console.WriteLine(ret.error);
-            Console.ResetColor();
-            return false;
+            ret = await Program.RunCommandAsync("hdiutil",
+                $"create -volname \"{projectName}\" -srcfolder \"{outputDir}\" -ov -format UDZO \"{dmgPath}\"");
+
+            if (ret.exitCode != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[ERROR] Failed to create DMG.");
+                Console.WriteLine(ret.error);
+                Console.ResetColor();
+                return false;
+            }
         }
-        
-        if (File.Exists(applicationsLink) || Directory.Exists(applicationsLink))
+        else
         {
-            try { File.Delete(applicationsLink); } catch { Directory.Delete(applicationsLink); }
+             Console.WriteLine($"DryRun - Created DMG file {dmgName} on {dmgPath}.");   
         }
-        
+
+        if (!dryRun)
+        {
+            if (File.Exists(applicationsLink) || Directory.Exists(applicationsLink))
+            {
+                try
+                {
+                    File.Delete(applicationsLink);
+                }
+                catch
+                {
+                    Directory.Delete(applicationsLink);
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine($"DryRun - Deleted applications link to {applicationsLink}.");
+        }
+
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"[INFO] DMG created: {dmgPath}");
         Console.ResetColor();
         
-        if (notarize)
+        if (notarize && !dryRun)
         {
             var check = await Program.RunCommandAsync("xcrun", "notarytool help");
 
