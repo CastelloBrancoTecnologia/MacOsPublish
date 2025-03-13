@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Cryptography;
 
@@ -24,16 +25,17 @@ namespace MacOsPublish;
             └── Info.plist
 */
 
+[SuppressMessage("ReSharper", "LocalizableElement")]
 static class Program
 {
     static async Task Main(string[] args)
     {
-        string? version = Assembly
+        string? macOsPublishVersion = Assembly
             .GetExecutingAssembly()
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            ?.InformationalVersion;
+            .GetCustomAttribute<AssemblyVersionAttribute>()
+            ?.Version;
         
-        Console.WriteLine($"MacOsPublish V{version} - Copyright (C) 2025 Castello Branco Technologia LTDA");
+        Console.WriteLine($"MacOsPublish V{macOsPublishVersion} - Copyright (C) 2025 Castello Branco Technologia LTDA");
 
         Stopwatch sw = Stopwatch.StartNew();
 
@@ -125,6 +127,18 @@ static class Program
                     outputDir = args[indexOutput + 1];
                 }
             }
+            
+            string assemmblyVersion = DateTime.Now.ToString("yy.MM.dd.HHmm");
+
+            int indexAssemmblyVersion = Array.IndexOf(args, "--AssemmblyVersion");
+
+            if (indexAssemmblyVersion >= 0)
+            {
+                if (indexAssemmblyVersion < args.Length - 1)
+                {
+                    assemmblyVersion = args[indexAssemmblyVersion + 1];
+                }
+            }
 
             if (!dryRun)
             {
@@ -181,7 +195,8 @@ static class Program
                                                 profile, 
                                                 plistDir,
                                                 projectDir, 
-                                                dryRun))
+                                                dryRun, 
+                                                assemmblyVersion))
                 {
                     Environment.Exit(-1);
 
@@ -208,6 +223,7 @@ static class Program
             if (code != 0)
             {
                 Console.WriteLine($"[ERROR] Required tool not found: {tool}\n{err}");
+                
                 return false;
             }
         }
@@ -218,50 +234,8 @@ static class Program
     private static void ShowHelp()
     {
         Console.WriteLine();
-        Console.WriteLine(
-            @"  
-Description:
-  Definitive Publish for MACOS
-
-Uso:
-  MacOsPublish <PROJECT> [<OUTPUT>] [<SIGNING_IDENTITY>] [<INSTALLER_IDENTITY>] [--notarize <AppleProfile>]
-
-Argumentos:
-  <PROJECT>                   O arquivo de projeto para operar. 
-                              O arquivo de projeto deve ser um .csproj ou .sln.
-
-  [<OUTPUT_DIR>]              O diretório de saída no qual os bundle sera gerado.
-                              se nao especificado sera bin/UniversalBundleApp 
-            
-  [<SIGNING_IDENTITY>]        A identidade do desenvolvedor Apple. 
-                              Se for vazio nao assina o aplicativo
-
-  [<INSTALLER_IDENTITY>]      A identidade do instalador Apple. 
-
-  --notarize <AppleProfile>   Notarize the app using Apple Notary Service.
-                              If <AppleProfile> is not provided, defaults to ""MacOsPublishProfile""
-
-  --no-restore                Skip nuget restore.
-
-  --plist-dir  <path>         the directory of plist files (info/entitlements) if not in current directory.  
-
-  --dry-run                   Dont generate any files
-
-  -?, -h, --help       Mostrar a ajuda da linha de comando.
-
-  Note that to use --notarize, you must be signed in with xcrun notarytool:
-
-    xcrun notarytool store-credentials --apple-id <your-email> --team-id <TEAMID> --password <app-specific-password> --keychain-profile ""MacOsPublishProfile""
-
-    ⚠️ You only need to run this once. 
-    After that, you can pass --notarize in MacOsPublish and it will use the saved credentials. 
-
-   Get this tool at:
-        https://www.nuget.org/packages/MacOsPublish
-
-   Contribute to project at:
-        https://github.com/CastelloBrancoTecnologia/MacOsPublish
-"); 
+        
+        Console.WriteLine(MacOsPublishResources.HelpMessage); 
             
         Environment.Exit(-1);
     }
@@ -342,8 +316,9 @@ Argumentos:
         }
     }
     
-    private static async Task<bool> PublishRidAsync(string rid, string configuration, string version, string macOsDir, bool dryRun)
+    private static async Task<bool> PublishRidAsync(string rid, string configuration, string assemblyVersion, string macOsDir, bool dryRun)
     {
+        bool publishSingleFile = true; 
         bool publishReadyToRun = false;
         bool tieredCompilation = false;
         bool publishTrimmed = false;
@@ -352,17 +327,19 @@ Argumentos:
         bool includeAllContentForSelfExtract = true;
         
         string cmd = "dotnet";
-        string args = $"publish " 
-                      + $" -o bin/{configuration}/{rid}/publish"
-                      + $" -c {configuration} "
-                      + $" -r {rid} "
+        string args = $"publish "  
+                      + $" --configuration {configuration} "
+                      + $" --runtime {rid} "
+                      + $" --output bin/{configuration}/{rid}/publish "
+                      + $" -p:AssemblyVersion={assemblyVersion} " 
                       + $" -p:PublishReadyToRun={publishReadyToRun} "
+                      + $" -p:PublishSingleFile={publishSingleFile} "
                       + $" -p:TieredCompilation={tieredCompilation} "
                       + $" -p:PublishTrimmed={publishTrimmed} " 
+                      + $" -p:DebugSymbols={(configuration == "Debug").ToString().ToLower()}"
                       + $" -p:IncludeNativeLibrariesForSelfExtract={includeNativeLibrariesForSelfExtract} "
                       + $" -p:IncludeAllContentForSelfExtract={includeAllContentForSelfExtract} "
                       + $" -p:AppendTargetFrameworkToOutputPath=false " 
-                      + $" -p:AssemblyVersion={version} "
                       + $" -nowarn:NU3004,CS8002,CS1591,NU1900 "
                       + (selfContained ? " --self-contained " : " ");
         
@@ -417,10 +394,9 @@ Argumentos:
                                                         string profile, 
                                                         string plistDir,
                                                         string projectDir,
-                                                        bool dryRun)
+                                                        bool dryRun,
+                                                        string assemmblyVersion)
     {
-        string version = DateTime.Now.ToString("yy.MM.dd.HHmm");
-        
         string projectName = Path.GetFileNameWithoutExtension(projectFileName);
         
         string bundleName = $"{projectName}.app";
@@ -583,8 +559,8 @@ fi";
         }
 
         Task<bool>[] publishTasks = [
-            PublishRidAsync("osx-x64", configuration, version, macOsDir, dryRun),
-            PublishRidAsync("osx-arm64", configuration, version, macOsDir, dryRun)
+            PublishRidAsync("osx-x64", configuration, assemmblyVersion, macOsDir, dryRun),
+            PublishRidAsync("osx-arm64", configuration, assemmblyVersion, macOsDir, dryRun)
         ];
 
         bool[] results = await Task.WhenAll(publishTasks);
@@ -607,7 +583,7 @@ fi";
         {
 
             string cmd = "/usr/libexec/PlistBuddy";
-            string args = $"-c \"Set :CFBundleVersion {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
+            string args = $"-c \"Set :CFBundleVersion {assemmblyVersion}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
 
             if (!dryRun)
             {
@@ -627,7 +603,7 @@ fi";
                 Console.WriteLine($"DryRun - Executing {cmd} {args}.");
             }
 
-            args = $"-c \"Set :CFBundleShortVersionString {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
+            args = $"-c \"Set :CFBundleShortVersionString {assemmblyVersion}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
             if (!dryRun)
             {
                 ret = await Program.RunCommandAsync(cmd, args);
@@ -735,12 +711,12 @@ fi";
 
         if (!string.IsNullOrWhiteSpace(installerIdentity))
         {
-            string pkgPath = Path.Combine(outputDir, $"{projectName}-{version}-{configuration}.pkg");
+            string pkgPath = Path.Combine(outputDir, $"{projectName}-{assemmblyVersion}-{configuration}.pkg");
 
             if (!dryRun)
             {
                 ret = await Program.RunCommandAsync("productbuild",
-                    $"--version {version} --component \"{bundleDir}\" /Applications \"{pkgPath}\" --sign \"{installerIdentity}\" ");
+                    $"--version {assemmblyVersion} --component \"{bundleDir}\" /Applications \"{pkgPath}\" --sign \"{installerIdentity}\" ");
 
                 if (ret.exitCode != 0)
                 {
@@ -791,7 +767,7 @@ fi";
             Console.WriteLine($"DryRun - Deleted DS_Store files on bundle.");
         }
 
-        string dmgName = $"{projectName}-{version}.dmg";
+        string dmgName = $"{projectName}-{assemmblyVersion}.dmg";
         string dmgPath = Path.Combine(outputDir, "..", dmgName); // Store .dmg *outside* the folder
 
         Console.WriteLine($"[INFO] Creating DMG: {dmgPath}");

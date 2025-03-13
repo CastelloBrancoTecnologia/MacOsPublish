@@ -13,3 +13,9 @@
 /Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/MacOsPublish.pdb
 /Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/MacOsPublish.genruntimeconfig.cache
 /Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/ref/MacOsPublish.dll
+/Users/cesar/RiderProjects/MacOsPublish/bin/Release/net9.0/pt-BR/MacOsPublish.resources.dll
+/Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/MacOsPublish.MacOsPublishResources.resources
+/Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/MacOsPublish.MacOsPublishResources.pt-BR.resources
+/Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/MacOsPublish.csproj.GenerateResource.cache
+/Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/pt-BR/MacOsPublish.resources.cs
+/Users/cesar/RiderProjects/MacOsPublish/obj/Release/net9.0/pt-BR/MacOsPublish.resources.dll

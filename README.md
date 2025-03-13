@@ -85,6 +85,7 @@ macospublish <PROJECT>  [...options]
 | `--installer-identity <INSTALLER_IDENTITY>` | Apple Installer identity (used for `.pkg` generation).                    |
 | `--notarize <PROFILE>`                      | Submit the `.dmg` to Apple Notary Service. Requires `xcrun notarytool`.   |
 | `--plist-dir <path>`                        | the directory of plist files (info/entitlements) if not in current dir.`. |
+| `--AssemblyVersion <version>`               | the version to put in AssemblyVersion.                                    |
 | `--no-restore`                              | Skip `dotnet restore`.                                                    |
 | `--dry-run`                                 | Dont Generate Any Files.                                                  |
 | `-h`, `--help`                              | Display help.                                                             |

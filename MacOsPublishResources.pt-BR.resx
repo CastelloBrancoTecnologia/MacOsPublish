@@ -1,0 +1,61 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="HelpMessage" xml:space="preserve">
+        <value>Descrição:
+  Publicação definitiva de programas dot net para macOS
+
+Uso:
+  MacOsPublish &lt;PROJETO&gt; [...opções]
+
+Argumentos:
+  &lt;PROJETO&gt;                                                       O arquivo de projeto a ser utilizado.
+                                                                            O arquivo de projeto deve ser um .csproj ou .sln.
+
+  --output &lt;DIRETÓRIO_SAÍDA&gt;                           O diretório de saída onde o bundle será gerado.
+                                                                            Se não especificado, o padrão é bin/UniversalBundleApp
+
+  --signing &lt;IDENTIDADE_ASSINATURA&gt;             A identidade de assinatura do desenvolvedor Apple.
+                                                                            Se estiver vazio, o aplicativo não será assinado.
+
+  --installer-identity &lt;IDENTIDADE_INSTALADOR&gt;  A identidade do instalador Apple.
+
+  --notarize &lt;PerfilApple&gt;                                      Notariza o app usando o serviço Apple Notary.
+                                                                              Se &lt;PerfilApple&gt; não for informado, o padrão é "MacOsPublishProfile"
+
+  --no-restore                                                        Pula a restauração do NuGet.
+
+  --plist-dir &lt;caminho&gt;                                          Diretório onde estão os arquivos Info.plist e Entitlements.plist.
+                                                                             Se não definido, usa o diretório atual.
+
+  --dry-run                                                            Não gera nenhum arquivo (modo simulação).
+
+  --AssemblyVersion &lt;versão&gt;                            Define a versão do assembly.
+
+  -?, -h, --help                                                     Mostra a ajuda da linha de comando.
+
+  Observação: para usar --notarize, é necessário estar autenticado com o xcrun notarytool:
+
+    xcrun notarytool store-credentials --apple-id &lt;seu-email&gt; --team-id &lt;TEAMID&gt; --password &lt;senha-específica-do-app&gt; --keychain-profile ""MacOsPublishProfile""
+
+    ⚠️ Você só precisa executar esse comando uma vez.
+    Depois disso, você pode usar --notarize no MacOsPublish e ele usará as credenciais salvas.
+
+   Obtenha esta ferramenta em:
+        https://www.nuget.org/packages/MacOsPublish
+
+   Contribua com o projeto em:
+        https://github.com/CastelloBrancoTecnologia/MacOsPublish
+</value>
+    </data>
+</root>

@@ -8,7 +8,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>macospublish</ToolCommandName>
         <PackageId>MacOsPublish</PackageId>
-        <Version>1.1.4</Version>
+        <Version>1.2.1</Version>
         <Authors>Cesar Murilo Castello Branco Filho</Authors>
         <Company>Castello Branco Tecnologia LTDA</Company>
         <Description>Publish and bundle .NET apps for macOS</Description>
@@ -26,5 +26,20 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="MacOsPublishResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>MacOsPublishResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="MacOsPublishResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>MacOsPublishResources.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="HelpMessage" xml:space="preserve">
+        <value>Description:
+  Definitive Publish for macOS
+
+Usage:
+  MacOsPublish &lt;PROJECT&gt; [...options]
+
+Arguments:
+  &lt;PROJECT&gt;                                                       The project file to operate on.
+                                                                            The project file must be a .csproj or .sln.
+
+  -- output &lt;OUTPUT_DIR&gt;                                  The output directory where the bundle will be generated.
+                                                                             If not specified, it defaults to bin/UniversalBundleApp
+
+  --signing &lt;SIGNING_IDENTITY&gt;                          The Apple Developer signing identity.
+                                                                              If empty, the application will not be signed.
+
+  --installer-identity &lt;INSTALLER_IDENTITY&gt;         The Apple Installer identity.
+
+  --notarize &lt;AppleProfile&gt;                                    Notarize the app using Apple Notary Service.
+                                                                              If &lt;AppleProfile&gt; is not provided, defaults to "MacOsPublishProfile"
+
+  --no-restore                                                        Skip NuGet restore.
+
+  --plist-dir &lt;path&gt;                                                The directory where Info.plist and Entitlements.plist are located.
+                                                                              If not set, uses the current directory.
+
+  --dry-run                                                             Do not generate any files.
+
+  --AssemblyVersion &lt;version&gt;                            The version of the assembly.
+
+  -?, -h, --help                                                       Show command-line help.
+
+  Note that to use --notarize, you must be signed in with xcrun notarytool:
+
+    xcrun notarytool store-credentials --apple-id &lt;your-email&gt; --team-id &lt;TEAMID&gt; --password &lt;app-specific-password&gt; --keychain-profile ""MacOsPublishProfile""
+
+    ⚠️ You only need to run this once.
+    After that, you can pass --notarize in MacOsPublish and it will use the saved credentials.
+
+   Get this tool at:
+        https://www.nuget.org/packages/MacOsPublish
+
+   Contribute to the project at:
+        https://github.com/CastelloBrancoTecnologia/MacOsPublish
+
+</value>
+    </data>
+</root>
