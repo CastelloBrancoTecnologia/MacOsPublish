@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace MacOsPublish;
 
@@ -28,12 +29,27 @@ namespace MacOsPublish;
 [SuppressMessage("ReSharper", "LocalizableElement")]
 static class Program
 {
+    public static string StripInformationalVersionGitHash(string version)
+    {
+        if (string.IsNullOrWhiteSpace(version))
+            return version;
+
+        // Match + followed by exactly 40 lowercase hex digits at the end
+        
+        var match = Regex.Match(version, @"^(?<version>.+)\+[a-f0-9]{40}$", RegexOptions.IgnoreCase);
+
+        if (match.Success)
+            return match.Groups["version"].Value;
+
+        return version;
+    }
+    
     static async Task Main(string[] args)
     {
-        string? macOsPublishVersion = Assembly
+        string? macOsPublishVersion = StripInformationalVersionGitHash(Assembly
             .GetExecutingAssembly()
-            .GetCustomAttribute<AssemblyVersionAttribute>()
-            ?.Version;
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion ?? "");
         
         Console.WriteLine($"MacOsPublish V{macOsPublishVersion} - Copyright (C) 2025 Castello Branco Technologia LTDA");
 
@@ -96,25 +112,25 @@ static class Program
                 }
             }
             
-            if (!args.Contains("--no-restore"))
-            {
-                Console.WriteLine("[INFO] Restoring NuGet packages...");
-
-                (int exitCode, string output, string error)
-                    restore = await Program.RunCommandAsync("dotnet", $"restore \"{projectFileName}\"");
-
-                if (restore.exitCode != 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("[ERROR] Failed to restore project.");
-                    Console.WriteLine(restore.error);
-                    Console.ResetColor();
-
-                    Environment.Exit(-1);
-
-                    return;
-                }
-            }
+            // if (!args.Contains("--no-restore"))
+            // {
+            //     Console.WriteLine("[INFO] Restoring NuGet packages...");
+            //
+            //     (int exitCode, string output, string error)
+            //         restore = await Program.RunCommandAsync("dotnet", $"restore \"{projectFileName}\"");
+            //
+            //     if (restore.exitCode != 0)
+            //     {
+            //         Console.ForegroundColor = ConsoleColor.Red;
+            //         Console.WriteLine("[ERROR] Failed to restore project.");
+            //         Console.WriteLine(restore.error);
+            //         Console.ResetColor();
+            //
+            //         Environment.Exit(-1);
+            //
+            //         return;
+            //     }
+            // }
             
             string outputDir = "bin/UniversalBundleApp";
 
