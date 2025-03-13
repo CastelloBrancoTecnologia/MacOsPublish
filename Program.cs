@@ -624,7 +624,7 @@ fi";
             }
             else
             {
-                Console.WriteLine("DryRun - Executing {cmd} {args}.");
+                Console.WriteLine($"DryRun - Executing {cmd} {args}.");
             }
 
             args = $"-c \"Set :CFBundleShortVersionString {version}\" \"{Path.Combine(contentsDir, "Info.plist")}\" ";
@@ -643,7 +643,7 @@ fi";
             }
             else
             {
-                Console.WriteLine("DryRun - Executing {cmd} {args}.");
+                Console.WriteLine($"DryRun - Executing {cmd} {args}.");
             }
         }
         
@@ -651,7 +651,9 @@ fi";
         {
             Console.WriteLine("[INFO] Starting code signing...");
 
-            foreach (string file in Directory.EnumerateFiles(macOsDir, "*", SearchOption.AllDirectories))
+            string[] files = Directory.GetFiles(macOsDir, "*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
             {
                 if (File.Exists(file))
                 {
