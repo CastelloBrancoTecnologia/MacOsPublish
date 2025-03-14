@@ -99,36 +99,22 @@ static class Program
             bool dryRun = args.Contains("--dry-run");
             bool notarize = args.Contains("--notarize");
 
-            (int exitCode, string output, string error) ret = (0, string.Empty, string.Empty);
-
-            if (!string.IsNullOrWhiteSpace(signIdentity) ||
-                !string.IsNullOrWhiteSpace(installerIdentity))
+            if (!string.IsNullOrWhiteSpace(signIdentity))
             {
-                ret = await RunCommandAsync("security", "find-identity -v -p codesigning", cancellationToken);
-            }
-
-            if (! string.IsNullOrWhiteSpace(signIdentity) &&
-                ! ret.output.Contains(signIdentity))
-            {
-                await Console.Error.WriteLineAsync(
-                    $"[ERROR] Signing identity '{signIdentity}' not found in keychain.");
-
-                Environment.Exit(-1);
-
-                return;
-            }
-            
-            if (! string.IsNullOrWhiteSpace(installerIdentity) &&
-                ! ret.output.Contains(installerIdentity))
-            {
-                await Console.Error.WriteLineAsync(
-                    $"[ERROR] Signing identity '{installerIdentity}' not found in keychain.");
+                (int exitCode, string output, string error) ret =
+                    await RunCommandAsync("security", "find-identity -v -p codesigning", cancellationToken);
                 
-                Environment.Exit(-1);
+                if (! ret.output.Contains(signIdentity))
+                {
+                    await Console.Error.WriteLineAsync(
+                        $"[ERROR] Signing identity '{signIdentity}' not found in keychain.");
 
-                return;
+                    Environment.Exit(-1);
+
+                    return;
+                }
             }
-            
+
             if (dryRun)
                 await Console.Out.WriteLineAsync("[INFO] Dry run mode enabled. No files will be generated.");
  

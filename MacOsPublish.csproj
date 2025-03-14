@@ -8,7 +8,7 @@
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>macospublish</ToolCommandName>
         <PackageId>MacOsPublish</PackageId>
-        <Version>1.5.0</Version>
+        <Version>1.5.1</Version>
         <Authors>Cesar Murilo Castello Branco Filho</Authors>
         <Company>Castello Branco Tecnologia LTDA</Company>
         <Description>Publish and bundle .NET apps for macOS</Description>
