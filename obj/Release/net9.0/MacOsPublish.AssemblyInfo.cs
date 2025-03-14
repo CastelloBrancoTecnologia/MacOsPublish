@@ -14,11 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2025 Castello Branco Technologia LTDA. All rights reserved.")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Publish and bundle .NET apps for macOS")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.5.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.5+8ba0b6a2157d3df98512150e80df3f1b52574a07")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.5.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.5.0+0fd2237315556eedaf6c28b349642115421bc617")]
 [assembly: System.Reflection.AssemblyProductAttribute("MacOsPublish")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MacOsPublish")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.2.5.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.5.0.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/CastelloBrancoTecnologia/MacOsPublish")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.

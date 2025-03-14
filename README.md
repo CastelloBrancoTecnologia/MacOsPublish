@@ -88,6 +88,7 @@ macospublish <PROJECT>  [...options]
 | `--AssemblyVersion <version>`     | the version to put in AssemblyVersion.                                    |
 | `--dry-run`                       | Dont Generate Any Files.                                                  |
 | `-h`, `--help`                    | Display help.                                                             |
+| `--version`                       | Display version.                                                          |
 
 ---
 

@@ -49,6 +49,8 @@ Arguments:
 
   -?, -h, --help                                                       Show command-line help.
 
+  --version                                                             Show version.
+
   Note that to use --notarize, you must be signed in with xcrun notarytool:
 
     xcrun notarytool store-credentials --apple-id &lt;your-email&gt; --team-id &lt;TEAMID&gt; --password &lt;app-specific-password&gt; --keychain-profile ""MacOsPublishProfile""
